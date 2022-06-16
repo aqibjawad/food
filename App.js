@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import { View, Image, LogBox } from "react-native";
 import * as firebase from "firebase"
 import 'firebase/firestore';
-import {WebView} from 'react-native-webview'
-import {Video} from 'expo-av'
+import { WebView } from 'react-native-webview'
+import { Video } from 'expo-av'
 
 import LoginScreen from "./app/screens/LoginScreen";
 import RegisterScreen from "./app/screens/RegisterScreen";
@@ -40,7 +40,7 @@ import { set } from "react-native-reanimated";
 import { useNetInfo } from "@react-native-community/netinfo";
 import AuthContext from "./app/Auth/context";
 import storage from "./app/Auth/storage";
-import {AppLoading} from 'expo'
+// import { AppLoading } from 'expo-app-loading'
 import MapScreen from "./app/screens/MapScreen";
 import { navigationRef } from "./app/navigation/rootNavigation";
 
@@ -57,7 +57,7 @@ var firebaseConfig = {
   measurementId: "G-BFS5WSKHHJ"
 };
 if (!firebase.apps.length) {
-firebase.initializeApp(firebaseConfig);
+  firebase.initializeApp(firebaseConfig);
 }
 
 const initialHTMLContent = `
@@ -78,112 +78,112 @@ svp_player.execute();
 <!--player code end-->`;
 
 export default function App() {
-const [user,setUser]=useState()
-const [userDetails,setUserDetails] = useState();
-const [isReady,setIsReady]=useState(false)
+  const [user, setUser] = useState()
+  const [userDetails, setUserDetails] = useState();
+  const [isReady, setIsReady] = useState(false)
 
 
-firebase.auth().onAuthStateChanged(function(fUser) {
-  if (fUser.emailVerified===true) {
-    
-    setUser(fUser)
-  } else {
-    setUser(null)
+  firebase.auth().onAuthStateChanged(function (fUser) {
+    // if (fUser.emailVerified===true) {
+
+    //   setUser(fUser)
+    // } else {
+    //   setUser(null)
+    // }
+  });
+
+  const restoreToken = async () => {
+    try {
+      const ev = await firebase.auth().currentUser
+      const u = await firebase.auth().currentUser
+      setUser(u)
+      const token = JSON.parse(await storage.getToken())
+      if (!token) return
+      setUserDetails(token)
+      console.log(token)
+      console.log(u)
+
+    } catch (error) {
+      console.log(error)
+    }
   }
-});
 
-const restoreToken = async () => {
-  try {
-    const ev = await firebase.auth().currentUser
-    const u = await firebase.auth().currentUser
-    setUser(u)
-    const token = JSON.parse(await storage.getToken())
-    if(!token) return
-    setUserDetails(token)
-    console.log(token)
-    console.log(u)
-    
-  } catch (error) {
-    console.log(error)
-  }
-}
-
-const [imageUri,setImageUri]=useState()
-const [, updateState] = React.useState();
+  const [imageUri, setImageUri] = useState()
+  const [, updateState] = React.useState();
   const forceUpdate = React.useCallback(() => updateState({}), []);
-const data= {
-  stars: 2.2,
-  description: "A paragraph is a series of related sentences developing a central idea, called the topic. Try to think about paragraphs in terms of thematic unity: a paragraph is a sentence or a group of sentences that supports one central, unified idea. Paragraphs add one idea at a time to your broader argument.",
-  username: "Hamza Ahmed" 
-}
+  const data = {
+    stars: 2.2,
+    description: "A paragraph is a series of related sentences developing a central idea, called the topic. Try to think about paragraphs in terms of thematic unity: a paragraph is a sentence or a group of sentences that supports one central, unified idea. Paragraphs add one idea at a time to your broader argument.",
+    username: "Hamza Ahmed"
+  }
 
-const netInfo = useNetInfo()
+  const netInfo = useNetInfo()
 
-   if(!isReady){ 
-   return <AppLoading startAsync={restoreToken} onFinish={()=>setIsReady(true)} />
- }
+  // if (!isReady) {
+  //   return <AppLoading startAsync={restoreToken} onFinish={() => setIsReady(true)} />
+  // }
 
 
 
-  return  (
-    <AuthContext.Provider value={{userDetails, setUserDetails}}>
-    <NavigationContainer ref = {navigationRef} theme = {navigationTheme}>
-      {userDetails ? <AppNavigator></AppNavigator> : <AuthNavigator></AuthNavigator>}
-    </NavigationContainer>
+  return (
+    <AuthContext.Provider value={{ userDetails, setUserDetails }}>
+      <NavigationContainer ref={navigationRef} theme={navigationTheme}>
+        {userDetails ? <AppNavigator></AppNavigator> : <AuthNavigator></AuthNavigator>}
+      </NavigationContainer>
     </AuthContext.Provider>
   );
- 
-// return (
-//   <AuthContext.Provider value={{userDetails, setUserDetails}}>
-// <MapScreen canDrag={true}></MapScreen>
-// </AuthContext.Provider>)
-    
+
+  // return (
+  //   <AuthContext.Provider value={{userDetails, setUserDetails}}>
+  // <MapScreen canDrag={true}></MapScreen>
+  // </AuthContext.Provider>)
+
 
 
   //     <View>
-//     <View>
-//     <AppForm
-//         initialValues={{
-//           images: []
-//         }}
-//         onSubmit={(values) =>{uploadImageAsync(values.images[0]); console.log(imageUri); forceUpdate()}}
-//       >
-//       <FormImagePicker name="images" />
-//       <SubmitButton title="Post" />
-//       </AppForm>
-//       </View>
-//       <View>
-// <Image style={{height: 500, width: 500 }} source={{uri: imageUri}} ></Image>
-//       </View>
-//       </View>
+  //     <View>
+  //     <AppForm
+  //         initialValues={{
+  //           images: []
+  //         }}
+  //         onSubmit={(values) =>{uploadImageAsync(values.images[0]); console.log(imageUri); forceUpdate()}}
+  //       >
+  //       <FormImagePicker name="images" />
+  //       <SubmitButton title="Post" />
+  //       </AppForm>
+  //       </View>
+  //       <View>
+  // <Image style={{height: 500, width: 500 }} source={{uri: imageUri}} ></Image>
+  //       </View>
+  //       </View>
 
-async function uploadImageAsync(uri) {
-  const blob = await new Promise((resolve, reject) => {
-    const xhr = new XMLHttpRequest();
-    xhr.onload = function() {
-      resolve(xhr.response);
-    };
-    xhr.onerror = function(e) {
-      console.log(e);
-      reject(new TypeError('Network request failed'));
-    };
-    xhr.responseType = 'blob';
-    xhr.open('GET', uri, true);
-    xhr.send(null);
-  });
+  async function uploadImageAsync(uri) {
+    const blob = await new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.onload = function () {
+        resolve(xhr.response);
+      };
+      xhr.onerror = function (e) {
+        console.log(e);
+        reject(new TypeError('Network request failed'));
+      };
+      xhr.responseType = 'blob';
+      xhr.open('GET', uri, true);
+      xhr.send(null);
+    });
 
-  const ref = firebase
-    .storage()
-    .ref().child(Math.random(1000,10000).toString())
+    const ref = firebase
+      .storage()
+      .ref().child(Math.random(1000, 10000).toString())
 
-  const snapshot = await ref.put(blob);
+    const snapshot = await ref.put(blob);
 
-  // We're done with the blob, close and release it
-  blob.close();
-  let imageref= await snapshot.ref.getDownloadURL();
-  setImageUri(imageref)
-  return await snapshot.ref.getDownloadURL();
-}
- 
-  
+    // We're done with the blob, close and release it
+    blob.close();
+    let imageref = await snapshot.ref.getDownloadURL();
+    setImageUri(imageref)
+    return await snapshot.ref.getDownloadURL();
+  }
+
+
 }
