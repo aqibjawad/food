@@ -37,8 +37,8 @@ const styles = StyleSheet.create({
   },
   logoContainer: {
     position: "absolute",
-    top: 70,
-    alignItems: "center",
+    top: 100,
+    alignItems: "stretch",
   },
   tagline: {
     fontSize: 25,

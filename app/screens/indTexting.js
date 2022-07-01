@@ -6,16 +6,16 @@ import 'firebase/firestore'
 import AuthContext from '../Auth/context'
 
 
-var firebaseConfig = {
-    apiKey: "AIzaSyA893QImLDZFgNhnHwt8EyfOf0rqcIToag",
-    authDomain: "foodbeast-340381.firebaseapp.com",
-    databaseURL: "https://foodbeast-340381.firebaseio.com",
-    projectId: "foodbeast-340381",
-    storageBucket: "foodbeast-340381.appspot.com",
-    messagingSenderId: "947968756348",
-    appId: "1:947968756348:web:5663051b369f8a39ff17f9",
-    measurementId: "G-BFS5WSKHHJ"
-  };
+const firebaseConfig = {
+    apiKey: "AIzaSyDOw29M3kg5GcGPCVbTRoRHzvCHrQtwHhs",
+    authDomain: "foodbeast-420b9.firebaseapp.com",
+    projectId: "foodbeast-420b9",
+    storageBucket: "foodbeast-420b9.appspot.com",
+    messagingSenderId: "648042141371",
+    appId: "1:648042141371:web:424bde15c8b9cb2d1a7b9e",
+    measurementId: "G-SDHENS9H5F"
+};
+
   if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
   }
